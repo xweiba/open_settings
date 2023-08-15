@@ -2,6 +2,7 @@ package alihoseinpoor.com.open_settings;
 
 import android.content.Context;
 import android.content.Intent;
+import 	android.net.Uri;
 
 import androidx.annotation.NonNull;
 
@@ -212,7 +213,8 @@ public class OpenSettingsPlugin implements FlutterPlugin, MethodCallHandler {
 
                 case "manage_all_files_access_permission":
                     target = "android.settings.MANAGE_ALL_FILES_ACCESS_PERMISSION";
-                    handleJumpToSetting(target);
+                    Uri uri = Uri.Parse("package:" + mContext.ApplicationInfo.PackageName);
+                    handleJumpToSettingByPackage(target, uri);
                     break;
 
                 case "manage_application":
@@ -421,7 +423,10 @@ public class OpenSettingsPlugin implements FlutterPlugin, MethodCallHandler {
     }
 
     private void handleJumpToSetting(String target) {
-        Intent intent = new Intent(target);
+        this.handleJumpToSettingByPackage(target, null);
+    }
+    private void handleJumpToSettingByPackage(String target, Uri uri) {
+        Intent intent = new Intent(target, uri);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
     }
